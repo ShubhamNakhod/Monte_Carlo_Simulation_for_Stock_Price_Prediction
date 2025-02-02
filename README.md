@@ -105,12 +105,6 @@ plt.show()
 ### Trading Applications
 - **Risk Management:** Helps estimate potential future price fluctuations.
 - **Options Pricing:** Used to price derivatives by simulating different market scenarios.
-- **Algorithmic Trading:** Can be integrated into **AI-based trading strategies**.
-
-## Next Steps
-1. **Modify the stock symbol** to simulate other stocks (e.g., `"AAPL"`, `"TSLA"`, `"AMZN"`).
-2. **Extend the forecast horizon** to 200+ days for long-term predictions.
-3. **Use Reinforcement Learning (RLHF)** to optimize trading decisions based on Monte Carlo outcomes.
 
 ## Author & Credits
 - **Developed by:** Shubham Ravindra Nakhod  
