@@ -1,112 +1,68 @@
-# Monte Carlo Simulation for Stock Price Prediction
+Monte Carlo Simulation for Stock Price Prediction
+This project simulates future stock prices using the Monte Carlo method and Geometric Brownian Motion (GBM). It models 1,000 possible price paths for the S&P 500 (^GSPC) over the next 100 trading days using historical data from Yahoo Finance.
 
-## Overview
-This project simulates **future stock price movements** using the **Monte Carlo method**. It retrieves historical stock data from **Yahoo Finance (`yfinance`)** and generates **1,000 potential price paths** over the next **100 trading days**.
+Overview
+- Fetches historical stock prices from Yahoo Finance (yfinance)
+- Computes daily return and volatility
+- Simulates future price paths using the GBM model
+- Visualizes simulation results with a reference to the current price
 
-## How It Works
-### 1. **Download Historical Stock Data**
-- Fetches closing prices for **S&P 500 (`^GSPC`)** from **Yahoo Finance**.
-- Computes **daily returns & volatility** using historical data.
+<pre> ```Project Structure
 
-### 2. **Simulate Future Stock Prices**
-- Uses the **Geometric Brownian Motion (GBM) model**:
-  \[
-  S_t = S_0 \times e^{(\mu - \frac{1}{2} \sigma^2)t + \sigma W_t}
-  \]
-- Generates **1,000 simulated stock price paths** for the next **100 days**.
+├── Monte_Carlo_Simulation.ipynb     # Jupyter notebook version of the simulation
+├── montecarlo.py                    # Standalone script for simulation and plotting
+├── Simulated chart.png              # Output plot of Monte Carlo simulation
+├── requirements.txt                 # Required dependencies
+└── README.md                        # Project documentation``` </pre>
 
-### 3. **Visualize the Simulations**
-- Plots **simulated price trajectories** over time.
-- A **red dashed line** marks the **current stock price** as a reference.
+Sample Output
+![Simulated chart](https://github.com/user-attachments/assets/344727fd-2dff-47d9-a456-0cd236cbf6c7)
 
-## Project Files
-- `montecarlo.py` → Python script for Monte Carlo simulation.
-- `README.md` → Documentation (this file).
-- `requirements.txt` → List of dependencies.
 
-## Installation & Usage
-### Step 1: Install Dependencies
-Ensure you have Python 3 installed, then run:
-```bash
-pip install numpy pandas matplotlib yfinance
-```
+Installation
+- Install required packages:
+<pre> ```bash
+pip install numpy pandas matplotlib yfinance``` </pre>
 
-### Step 2: Run the Simulation
-Execute the script:
-```bash
-python montecarlo.py
-```
+Usage
+- Run the simulation script:
+<pre> ```bash
+python montecarlo.py``` </pre>
 
-### Step 3: Interpret the Output
-- The chart displays **1,000 potential future stock prices**.
-- **Wide spread** → High **volatility** (higher uncertainty).
-- **Most paths near the red line** → Stock is **stable** in the short term.
+How It Works
+1. Fetch Historical Stock Data
+- Downloads S&P 500 closing prices (2023–2024)
+- Extracts the last closing price (S₀)
+- Calculates mean return (μ) and volatility (σ)
 
-## Code Breakdown
-### **Import Libraries**
-```python
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import yfinance as yf
-```
-- `numpy` → Handles random number generation & mathematical operations.
-- `pandas` → Loads stock price data.
-- `matplotlib.pyplot` → Visualizes stock price simulations.
-- `yfinance` → Downloads **real historical stock prices**.
+2. Monte Carlo Simulation with GBM
+The model uses the formula:
 
-### **Fetching Stock Data**
-```python
-stock_symbol = "^GSPC"
-data = yf.download(stock_symbol, start="2023-01-01", end="2024-01-01")
-S0 = float(data["Close"].iloc[-1])  # Extracts last closing price
-```
-- Retrieves **S&P 500 data** for the past year.
-- Extracts **last closing price** (`S0`), used as the **starting point**.
+<pre> ```lua
 
-### **Monte Carlo Simulation**
-```python
-num_days = 100
-num_simulations = 1000
-dt = 1
+S(t) = S₀ * exp[(μ - 0.5σ²)t + σW(t)]
+``` </pre>
 
-stock_paths = np.zeros((num_simulations, num_days))
+Where:
 
-for i in range(num_simulations):
-    Wt = np.random.normal(0, np.sqrt(dt), num_days)  # Random noise
-    stock_paths[i, :] = S0 * np.exp(np.cumsum((mu - 0.5 * sigma**2) * dt + sigma * Wt))
-```
-- Simulates **1,000 price paths** using the **Geometric Brownian Motion model**.
-- `Wt` introduces **random market fluctuations**.
+* S₀: Current stock price
+* μ: Historical mean return
+* σ: Historical volatility
+* W(t): Brownian motion (normally distributed random walk)
 
-### **Visualization**
-```python
-plt.figure(figsize=(10, 6))
-for i in range(100):  # Display 100 paths for clarity
-    plt.plot(stock_paths[i, :], linewidth=0.5, alpha=0.5)
+It simulates 1,000 possible price paths over 100 future days.
 
-plt.axhline(S0, color='r', linestyle='dashed', label="Current Price")
-plt.xlabel("Days")
-plt.ylabel("Stock Price")
-plt.title(f"Monte Carlo Simulation for {stock_symbol}")
-plt.legend()
-plt.show()
-```
-- **Plots 100 simulated paths** (out of 1,000) for readability.
-- **Red dashed line** → Represents **today's price** as a baseline.
+3. Visualization
+- Plots 100 simulated paths for clarity
+- Highlights current price with a red dashed line
 
-## Interpretation & Applications
-### How to Read the Chart
-- **Upward trend** → Stock might be **bullish**.
-- **Downward trend** → Stock might be **bearish**.
-- **Wide spread** → Indicates **high volatility** and uncertainty.
-- **Tight spread** → Indicates **low volatility** (predictable behavior).
+Interpretation
+- Upward trend → Potential bullish behavior
+- Downward trend → Potential bearish behavior
+- Wider spread → High volatility and uncertainty
+- Tighter spread → Low volatility and predictability
 
-### Trading Applications
-- **Risk Management:** Helps estimate potential future price fluctuations.
-- **Options Pricing:** Used to price derivatives by simulating different market scenarios.
-
-## Author & Credits
-- **Developed by:** Shubham Ravindra Nakhod  
-- **Inspired by:** Quantitative Finance & Algorithmic Trading
-
+Applications
+- Risk Management: Estimate future price ranges under uncertainty
+- Options Pricing: Simulate underlying asset paths for derivative valuation
+- Scenario Testing: Model outcomes under different market assumptions
